@@ -1,6 +1,7 @@
 package com.acrs.juscadastro.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -101,13 +102,7 @@ public class Contato implements Serializable {
     private Email email;
 
     @ManyToMany(mappedBy = "clientes", cascade = CascadeType.ALL)
-    private List<Processo> processosAFavor;
-
-    @ManyToMany(mappedBy = "partesContrarias", cascade = CascadeType.ALL)
-    private List<Processo> processosContra;
-
-    @ManyToMany(mappedBy = "testemunhas", cascade = CascadeType.ALL)
-    private List<Processo> processosTestemunhados;
+    private List<Processo> processosAbertos;
 
     // Getters-Setters ---------------------------------------------------------    
     public Integer getId() {
@@ -206,28 +201,12 @@ public class Contato implements Serializable {
         this.email = email;
     }
 
-    public List<Processo> getProcessosAFavor() {
-        return processosAFavor;
+    public List<Processo> getProcessosAbertos() {
+        return processosAbertos;
     }
 
-    public void setProcessosAFavor(List<Processo> processosAFavor) {
-        this.processosAFavor = processosAFavor;
-    }
-
-    public List<Processo> getProcessosContra() {
-        return processosContra;
-    }
-
-    public void setProcessosContra(List<Processo> processosContra) {
-        this.processosContra = processosContra;
-    }
-
-    public List<Processo> getProcessosTestemunhados() {
-        return processosTestemunhados;
-    }
-
-    public void setProcessosTestemunhados(List<Processo> processosTestemunhados) {
-        this.processosTestemunhados = processosTestemunhados;
+    public void setProcessosAbertos(List<Processo> processosAbertos) {
+        this.processosAbertos = processosAbertos;
     }
 
     // Metodos -----------------------------------------------------------------
@@ -261,19 +240,11 @@ public class Contato implements Serializable {
         return true;
     }
 
-    void addProcessosAFavor(Contato cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    void addProcesso(Processo processo) {
+        if (getProcessosAbertos() == null) {
+            setProcessosAbertos(new ArrayList<Processo>());
+        }
+        getProcessosAbertos().add(processo);
     }
 
-    void addProcessosAFavor(Processo aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    void addProcessoAFavor(Processo aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    void addProcessoParticipante(Processo aThis) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

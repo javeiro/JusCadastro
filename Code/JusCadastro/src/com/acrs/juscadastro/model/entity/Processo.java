@@ -276,7 +276,7 @@ public class Processo implements Serializable {
         if (getClientes() == null) {
             setClientes(new ArrayList<Contato>());
         }
-        cliente.addProcessoAFavor(this);
+        cliente.addProcesso(this);
         getClientes().add(cliente);
     }
 
@@ -284,7 +284,6 @@ public class Processo implements Serializable {
         if (getAdvogados()== null) {
             setAdvogados(new ArrayList<Advogado>());
         }
-        advogado.addProcesso(this);
         getAdvogados().add(advogado);
     }
 
@@ -292,22 +291,19 @@ public class Processo implements Serializable {
         if (getTestemunhas()== null) {
             setTestemunhas(new ArrayList<Contato>());
         }
-        testemunha.addProcessoParticipante(this);
         getTestemunhas().add(testemunha);
     }
 
     public void addParteContraria(Contato parteContraria) {
         if (getPartesContrarias()== null) {
-            setCompromissos(new ArrayList<Compromisso>());
+            setPartesContrarias(new ArrayList<Contato>());
         }
-        compromisso.setProcesso(this);
-        getCompromissos().add(compromisso);
+        getPartesContrarias().add(parteContraria);
     }
     public void addBalanco(Balanco balanco) {
         if (getBalanco() == null) {
             setBalanco(new ArrayList<Balanco>());
         }
-        balanco.setProcesso(this);
         getBalanco().add(balanco);
     }
 
@@ -315,8 +311,6 @@ public class Processo implements Serializable {
         if (getCompromissos() == null) {
             setCompromissos(new ArrayList<Compromisso>());
         }
-        compromisso.setProcesso(this);
         getCompromissos().add(compromisso);
     }
-
 }

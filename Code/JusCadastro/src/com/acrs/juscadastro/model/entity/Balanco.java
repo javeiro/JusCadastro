@@ -36,11 +36,6 @@ public class Balanco implements Serializable {
     @Column(name = "HISTORICO", length = 100000 /*, columnDefinition = "TEXT"*/)
     private String historico;
 
-    // Associacoes -------------------------------------------------------------
-    @ManyToOne
-    @Column(nullable = false)
-    private Processo processo;
-
     // Getters-Setters ---------------------------------------------------------
     public Integer getId() {
         return id;
@@ -80,14 +75,6 @@ public class Balanco implements Serializable {
 
     public void setHistorico(String historico) {
         this.historico = historico;
-    }
-
-    public Processo getProcesso() {
-        return processo;
-    }
-
-    public void setProcesso(Processo processo) {
-        this.processo = processo;
     }
 
     // Metodos -----------------------------------------------------------------
