@@ -6,8 +6,8 @@
 
 package com.acrs.juscadastro.control;
 
-import com.acrs.juscadastro.view.DlgProcesso;
-import com.acrs.juscadastro.view.DlgProcessoEditar;
+import com.acrs.juscadastro.view.dialog.DlgProcesso;
+import com.acrs.juscadastro.view.dialog.DlgProcessoEditar;
 
 /**
  *

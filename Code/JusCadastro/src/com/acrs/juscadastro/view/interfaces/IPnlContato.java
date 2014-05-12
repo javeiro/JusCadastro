@@ -6,23 +6,22 @@
 
 package com.acrs.juscadastro.view.interfaces;
 
-import com.acrs.juscadastro.view.PnlAdvogado;
-import com.acrs.juscadastro.view.PnlContactar;
-import com.acrs.juscadastro.view.PnlEndereco;
-import com.acrs.juscadastro.view.PnlTexto;
-import com.acrs.juscadastro.view.PnlPessoal;
+import com.acrs.juscadastro.view.panel.PnlAdvogado;
+import com.acrs.juscadastro.view.panel.PnlContactar;
+import com.acrs.juscadastro.view.panel.PnlEndereco;
+import com.acrs.juscadastro.view.panel.PnlTexto;
+import com.acrs.juscadastro.view.panel.PnlPessoal;
 
 /**
  *
  * @author acrs
  */
 public interface IPnlContato {
-    public PnlAdvogado getPnlAdvogado();
-    public PnlContactar getPnlContato();
-    public PnlEndereco getPnlEndereco();
-    public PnlTexto getPnlNota();
     public PnlPessoal getPnlPessoal();
+    public PnlEndereco getPnlEndereco();
+    public PnlContactar getPnlContactar();
+    public PnlAdvogado getPnlAdvogado();
+    public PnlTexto getPnlNota();
 
-    public void limpar();
-    
+    public void limpar();    
 }

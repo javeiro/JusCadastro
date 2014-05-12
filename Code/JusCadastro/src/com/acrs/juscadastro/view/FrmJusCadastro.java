@@ -4,6 +4,9 @@
  */
 package com.acrs.juscadastro.view;
 
+import com.acrs.juscadastro.view.dialog.DlgProcesso;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonica;
+import com.acrs.juscadastro.view.dialog.DlgSobre;
 import com.acrs.juscadastro.util.Timer;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
@@ -20,7 +23,7 @@ public class FrmJusCadastro extends javax.swing.JFrame {
      */
     public FrmJusCadastro() {
         initComponents();
-        mostrarTimer();
+        mostrarDataHoraAtual();
     }
 
     /**
@@ -81,7 +84,7 @@ public class FrmJusCadastro extends javax.swing.JFrame {
         tlbarPrincipal.add(btnAcompanhamentoDeProcessos);
 
         btnAgendaTelefonica.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/acrs/juscadastro/view/img/contatos_48x48.png"))); // NOI18N
-        btnAgendaTelefonica.setToolTipText("Agenda Telefônica");
+        btnAgendaTelefonica.setToolTipText("Contatos");
         btnAgendaTelefonica.setFocusable(false);
         btnAgendaTelefonica.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAgendaTelefonica.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -261,7 +264,7 @@ public class FrmJusCadastro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaidaActionPerformed
 
     private void mnuiAgendaTelefonicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuiAgendaTelefonicaActionPerformed
-        new DlgContato(this, true).setVisible(true);
+        new DlgAgendaTelefonica(this, true).setVisible(true);
     }//GEN-LAST:event_mnuiAgendaTelefonicaActionPerformed
 
     private void btnAcompanhamentoDeProcessosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcompanhamentoDeProcessosActionPerformed
@@ -322,7 +325,7 @@ public class FrmJusCadastro extends javax.swing.JFrame {
         });
     }
 
-    private void mostrarTimer() {
+    private void mostrarDataHoraAtual() {
         Timer timer = new Timer();
         timer.start();
         timer.label = lblDataHora;

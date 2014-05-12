@@ -42,7 +42,7 @@ public class ContatoDAO {
     
     public List<Integer> buscarTodosIds() {
         EntityManager em = JPAUtil.getInstance();
-        TypedQuery query = em.createNamedQuery("Contato.getAllIds", Integer.class);
+        TypedQuery query = em.createNamedQuery("Contato.getIds", Integer.class);
         List<Integer> ids = query.getResultList();
         return !ids.isEmpty()?ids:null;        
     }
@@ -61,28 +61,28 @@ public class ContatoDAO {
 
     public List<Integer> buscarPorNomeIds(String nome) {
         EntityManager em = JPAUtil.getInstance();
-        TypedQuery query = em.createNamedQuery("Contato.getAllNameIds", Contato.class).setParameter("nome", "%" + nome + "%");
+        TypedQuery query = em.createNamedQuery("Contato.getIdsByName", Contato.class).setParameter("nome", "%" + nome + "%");
         List<Integer> ids = query.getResultList();
         return !ids.isEmpty()?ids:null;
     }
 
     public List<Integer> buscarPorEmpresaIds(String empresa) {
         EntityManager em = JPAUtil.getInstance();
-        TypedQuery query = em.createNamedQuery("Contato.getAllCompanyIds", Contato.class).setParameter("empresa", "%" + empresa + "%");
+        TypedQuery query = em.createNamedQuery("Contato.getIdsByCompany", Contato.class).setParameter("empresa", "%" + empresa + "%");
         List<Integer> ids = query.getResultList();
         return !ids.isEmpty()?ids:null;
     }
 
     public List<Integer> buscarPorNascimentoIds(Calendar dataNascimento) {
         EntityManager em = JPAUtil.getInstance();
-        TypedQuery query = em.createNamedQuery("Contato.getAllAgeIds", Contato.class).setParameter("dataNascimento", dataNascimento);
+        TypedQuery query = em.createNamedQuery("Contato.getIdsByGender", Contato.class).setParameter("dataNascimento", dataNascimento);
         List<Integer> ids = query.getResultList();
         return !ids.isEmpty()?ids:null;
     }
 
     public List<Integer> buscarPorNotasIds(String nota) {
         EntityManager em = JPAUtil.getInstance();
-        TypedQuery query = em.createNamedQuery("Contato.getAllNotesIds", Contato.class).setParameter("notas", "%" + nota + "%");
+        TypedQuery query = em.createNamedQuery("Contato.getIdsByNotes", Contato.class).setParameter("notas", "%" + nota + "%");
         List<Integer> ids = query.getResultList();
         return !ids.isEmpty()?ids:null;
     }

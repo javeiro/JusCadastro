@@ -42,7 +42,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Contato.getIds", query = "SELECT c.id FROM Contato c"),
     @NamedQuery(name = "Contato.getIdsByName", query = "SELECT c.id FROM Contato c WHERE c.nome LIKE :nome"),
     @NamedQuery(name = "Contato.getIdsByCompany", query = "SELECT c.id FROM Contato c WHERE c.empresa LIKE :empresa"),
-    @NamedQuery(name = "Contato.getIdsByAge", query = "SELECT c.id FROM Contato c WHERE c.nascimento = :nascimento"),
+    @NamedQuery(name = "Contato.getIdsByGender", query = "SELECT c.id FROM Contato c WHERE c.nascimento = :nascimento"),
     @NamedQuery(name = "Contato.getIdsByNotes", query = "SELECT c.id FROM Contato c WHERE c.notas LIKE :notas")})
 public class Contato implements Serializable {
 

@@ -14,18 +14,17 @@ import com.acrs.juscadastro.model.dao.ContatoDAO;
 import com.acrs.juscadastro.model.entity.Advogado;
 import com.acrs.juscadastro.model.entity.Contato;
 import com.acrs.juscadastro.report.LoadReportContato;
-import com.acrs.juscadastro.view.DlgContato;
-import com.acrs.juscadastro.view.DlgContatoEditar;
-import com.acrs.juscadastro.view.DlgContatoImprimir;
-import com.acrs.juscadastro.view.DlgContatoLocalizar;
-import com.acrs.juscadastro.view.DlgContatoTabela;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonica;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonicaEditar;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonicaImprimir;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonicaLocalizar;
+import com.acrs.juscadastro.view.dialog.DlgAgendaTelefonicaTabela;
 import com.acrs.juscadastro.view.interfaces.IPnlAdvogado;
 import com.acrs.juscadastro.view.interfaces.IPnlContato;
 import com.acrs.juscadastro.view.interfaces.IPnlContactar;
 import com.acrs.juscadastro.view.interfaces.IPnlEndereco;
 import com.acrs.juscadastro.view.interfaces.IPnlNota;
 import com.acrs.juscadastro.view.interfaces.IPnlPessoal;
-import com.acrs.juscadastro.view.interfaces.ITxtPaginador;
 import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,18 +40,12 @@ import net.sf.jasperreports.engine.JRException;
  *
  * @author acrs
  */
-public class ContatoControl {
+public class ContatoControl extends NavegacaoControl {
 
-    private static final int FILTRADO_POR_TODOS = 1;
     private static final int FILTRADO_POR_NOME = 2;
     private static final int FILTRADO_POR_EMPRESA = 3;
     private static final int FILTRADO_POR_NASCIMENTO = 4;
     private static final int FILTRADO_POR_NOTAS = 5;
-
-    private static List<Integer> ids = null;
-    private static Integer index = -1;
-    private static int filtroAtual = FILTRADO_POR_TODOS;
-    private static Object valorFiltro = null;
 
     static {
         buscarTodosIds();
@@ -64,12 +57,12 @@ public class ContatoControl {
 
     // Filtro ------------------------------------------------------------------
     
-    public static void mostrarFiltroAtual(DlgContatoLocalizar f) {
+    public static void mostrarFiltroAtual(DlgAgendaTelefonicaLocalizar f) {
         if (filtroAtual == FILTRADO_POR_TODOS) {
             f.getRbtTodos().doClick();
         } else if (filtroAtual == FILTRADO_POR_NASCIMENTO) {
             f.getRbtNascimento().doClick();
-            f.getDtcLocalizar().setCalendar((Calendar) valorFiltro);
+            f.getDtcLocalizar().setCalendar((Calendar) valorAtual);
         } else {
             if (filtroAtual == FILTRADO_POR_NOME) {
                 f.getRbtNome().doClick();
@@ -78,7 +71,7 @@ public class ContatoControl {
             } else {
                 f.getRbtNotas().doClick();
             }
-            f.getTxtLocalizar().setText((String) valorFiltro);
+            f.getTxtLocalizar().setText((String) valorAtual);
         }
     }
 
@@ -94,10 +87,10 @@ public class ContatoControl {
     
     // CRUD --------------------------------------------------------------------
 
-    public static void gravarRegistro(DlgContatoEditar dlg) {
+    public static void gravarRegistro(DlgAgendaTelefonicaEditar dlg) {
         ContatoDAO dao = new ContatoDAO();
         Contato c = materializar(dlg.getPnlPessoal(),
-                dlg.getPnlNota(), dlg.getPnlEndereco(), dlg.getPnlContato());
+                dlg.getPnlNota(), dlg.getPnlEndereco(), dlg.getPnlContactar());
         if (c.getId() == null) {
             dao.salvar(c);
             recarregarIds();
@@ -121,7 +114,7 @@ public class ContatoControl {
                 NotaBind.mostrarNota(c, f.getPnlNota());
 
                 //Preenche informações do painel contato
-                IPnlContactar iContato = f.getPnlContato();
+                IPnlContactar iContato = f.getPnlContactar();
                 ContactarBind.mostrarEmail(c.getEmail(), iContato);
                 ContactarBind.mostrarFixo(c.getTelFixo(), iContato);
                 ContactarBind.mostrarMovel(c.getTelMovel(), iContato);
@@ -148,7 +141,7 @@ public class ContatoControl {
 
     }
 
-    public static void excluirRegistro(DlgContato f) {
+    public static void excluirRegistro(DlgAgendaTelefonica f) {
         Integer id = f.getPnlPessoal().getIdAgendaTelefonica();
         if (id != null) {
             if (id > 0) {
@@ -159,7 +152,7 @@ public class ContatoControl {
         }
     }
 
-    public static void localizarRegistros(DlgContatoLocalizar f) {
+    public static void localizarRegistros(DlgAgendaTelefonicaLocalizar f) {
         if (f.getRbtTodos().isSelected()) {
             buscarTodosIds();
         } else if (f.getRbtNome().isSelected()) {
@@ -173,7 +166,7 @@ public class ContatoControl {
         }
     }
 
-    public static void listarRegistros(DlgContatoTabela f) {
+    public static void listarRegistros(DlgAgendaTelefonicaTabela f) {
         String[] columnNames = new String[]{
             "Nome", "CPF/CNPJ", "Nascimento", "Empresa",
             "Cargo", "Logradouro", "Nº", "Complemento",
@@ -263,38 +256,23 @@ public class ContatoControl {
     // Ids ---------------------------------------------------------------------
     
     private static void buscarTodosIds() {
-        ContatoDAO dao = new ContatoDAO();
-        ids = dao.buscarTodosIds();
-        filtroAtual = FILTRADO_POR_TODOS;
-        valorFiltro = null;
+        aplicarFiltro(new ContatoDAO().buscarTodosIds(), FILTRADO_POR_TODOS, null);
     }
 
     private static void buscarPorNomeIds(String nome) {
-        ContatoDAO dao = new ContatoDAO();
-        ids = dao.buscarPorNomeIds(nome);
-        filtroAtual = FILTRADO_POR_NOME;
-        valorFiltro = nome;
+        aplicarFiltro(new ContatoDAO().buscarPorNomeIds(nome), FILTRADO_POR_NOME, nome);
     }
 
     private static void buscarPorEmpresaIds(String empresa) {
-        ContatoDAO dao = new ContatoDAO();
-        ids = dao.buscarPorEmpresaIds(empresa);
-        filtroAtual = FILTRADO_POR_EMPRESA;
-        valorFiltro = empresa;
+        aplicarFiltro(new ContatoDAO().buscarPorEmpresaIds(empresa), FILTRADO_POR_EMPRESA, empresa);
     }
 
     private static void buscarPorNascimentoIds(Calendar nascimento) {
-        ContatoDAO dao = new ContatoDAO();
-        ids = dao.buscarPorNascimentoIds(nascimento);
-        filtroAtual = FILTRADO_POR_NASCIMENTO;
-        valorFiltro = nascimento;
+        aplicarFiltro(new ContatoDAO().buscarPorNascimentoIds(nascimento), FILTRADO_POR_EMPRESA, nascimento);
     }
 
     private static void buscarPorNotasIds(String nota) {
-        ContatoDAO dao = new ContatoDAO();
-        ids = dao.buscarPorNotasIds(nota);
-        filtroAtual = FILTRADO_POR_NOTAS;
-        valorFiltro = nota;
+        aplicarFiltro(new ContatoDAO().buscarPorNotasIds(nota), FILTRADO_POR_NOTAS, nota);
     }
 
     private static void recarregarIds() {
@@ -304,19 +282,19 @@ public class ContatoControl {
                 break;
             }
             case FILTRADO_POR_NOME: {
-                buscarPorNomeIds((String) valorFiltro);
+                buscarPorNomeIds((String) valorAtual);
                 break;
             }
             case FILTRADO_POR_EMPRESA: {
-                buscarPorEmpresaIds((String) valorFiltro);
+                buscarPorEmpresaIds((String) valorAtual);
                 break;
             }
             case FILTRADO_POR_NASCIMENTO: {
-                buscarPorNascimentoIds((Calendar) valorFiltro);
+                buscarPorNascimentoIds((Calendar) valorAtual);
                 break;
             }
             case FILTRADO_POR_NOTAS: {
-                buscarPorNotasIds((String) valorFiltro);
+                buscarPorNotasIds((String) valorAtual);
                 break;
             }
         }
@@ -350,7 +328,7 @@ public class ContatoControl {
         index = idx;
     }
 
-    public static void mostrarPrimeiroRegistro(DlgContato f) {
+    public static void mostrarPrimeiroRegistro(DlgAgendaTelefonica f) {
         if (ids != null) {
             index = 0;
             mostrarAtualRegistro(f);
@@ -360,7 +338,7 @@ public class ContatoControl {
         }
     }
 
-    public static void mostrarAnteriorRegistro(DlgContato f) {
+    public static void mostrarAnteriorRegistro(DlgAgendaTelefonica f) {
         if (ids != null) {
             if (index > 0) {
                 index--;
@@ -370,7 +348,7 @@ public class ContatoControl {
         }
     }
 
-    public static void mostrarProximoRegistro(DlgContato f) {
+    public static void mostrarProximoRegistro(DlgAgendaTelefonica f) {
         if (ids != null) {
             if (index < ids.size() - 1) {
                 index++;
@@ -380,7 +358,7 @@ public class ContatoControl {
         }
     }
 
-    public static void mostrarUltimoRegistro(DlgContato f) {
+    public static void mostrarUltimoRegistro(DlgAgendaTelefonica f) {
         if (ids != null) {
             index = ids.size() - 1;
             mostrarAtualRegistro(f);
@@ -398,18 +376,9 @@ public class ContatoControl {
         }
     }
 
-    public static void atualizarPaginador(ITxtPaginador f) {
-        if (ids != null) {
-            f.getTxtRegistroCorrente().setText((index + 1) + " de " + ids.size() + " registro(s)");
-        } else {
-            f.getTxtRegistroCorrente().setText("0 de 0 registro(s)");
-        }
-        f.getTxtRegistroCorrente().setForeground((filtroAtual == FILTRADO_POR_TODOS)?new java.awt.Color(0, 0, 255):new java.awt.Color(255, 0, 0)) ;
-    }
-
     // Impressao ---------------------------------------------------------------
     
-    public static void imprimirRegistros(DlgContatoImprimir d) throws JRException {
+    public static void imprimirRegistros(DlgAgendaTelefonicaImprimir d) throws JRException {
         List<Integer> lIds = null;
         if (d.getRbtRegistroAtual().isSelected()) {
             lIds = new ArrayList<>();

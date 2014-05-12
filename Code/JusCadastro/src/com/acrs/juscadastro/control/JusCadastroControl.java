@@ -6,6 +6,9 @@
 package com.acrs.juscadastro.control;
 
 import com.acrs.juscadastro.util.JPAUtil;
+import com.acrs.juscadastro.util.SplashScreen;
+import com.acrs.juscadastro.view.FrmJusCadastro;
+import com.acrs.juscadastro.view.panel.PnlSplashScreen;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,12 +32,6 @@ public class JusCadastroControl {
 
     private static String chave = "";
 
-    // Construtores ------------------------------------------------------------
-    static {
-        ajustarAparencia();
-        lerPropriedades();
-    }
-
     // Getters-Setters ---------------------------------------------------------
     public static String getEscritorio() {
         return escritorio;
@@ -55,7 +52,21 @@ public class JusCadastroControl {
     }
 
     // Metodos -----------------------------------------------------------------
-    public static void iniciarORM() {
+    public static void iniciarSistema() {
+        ajustarAparencia();
+        lerPropriedades();
+
+        SplashScreen splash = new SplashScreen(2000);
+        splash.showSplash(new PnlSplashScreen(), 300, 126);
+        
+        iniciarORM();
+        
+        splash.waitSplashAndExit();
+        
+        new FrmJusCadastro().setVisible(true);
+    }
+    
+    private static void iniciarORM() {
         /*try {*/
             JPAUtil.getInstance();
         /*} catch (Exception e) {
@@ -64,12 +75,17 @@ public class JusCadastroControl {
         }*/
     }
 
+    private static void iniciarPropriedades() {
+        escritorio = "Escritório JUSCADASTRO";
+        chave = "0000";
+        gravarPropriedades();
+    }
+
     private static void lerPropriedades() {
         Properties prop = new Properties();
-        FileInputStream input = null;
 
         try {
-            input = new FileInputStream(propriedades);
+            FileInputStream input = new FileInputStream(propriedades);
             prop.load(input);
             escritorio = prop.getProperty("escritorio");
             chave = prop.getProperty("chave");
@@ -79,12 +95,6 @@ public class JusCadastroControl {
             JOptionPane.showMessageDialog(null, "Falha ao ler config.properties.", "Erro:", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
-    }
-
-    private static void iniciarPropriedades() {
-        escritorio = "Escritório JUSCADASTRO";
-        chave = "0000";
-        gravarPropriedades();
     }
 
     private static void gravarPropriedades() {

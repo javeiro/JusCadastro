@@ -232,7 +232,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/com/acrs/juscadastro/view/img/contatos_48x48.png"/>
                 </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Agenda Telef&#xf4;nica"/>
+                <Property name="toolTipText" type="java.lang.String" value="Contatos"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
                 <Property name="verticalTextPosition" type="int" value="3"/>
